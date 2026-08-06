@@ -1,0 +1,24 @@
+<div id="resultModal" class="modal hidden">
+    <div class="modal-content">
+        <button onclick="closeModal()" class="close-btn">&times;</button>
+        
+        <div id="loadingState">
+            <div class="spinner"></div>
+            <p id="loadingText">Analyzing Resume...</p>
+        </div>
+
+        <div id="outputState" class="hidden">
+            <h3>Analysis Report</h3>
+            <div class="score-box">
+                <span>ATS Match Score:</span>
+                <strong class="score">82%</strong>
+            </div>
+            <h4>Missing Keywords:</h4>
+            <div class="tags">
+                <span class="tag">Docker</span>
+                <span class="tag">System Design</span>
+                <span class="tag">REST API</span>
+            </div>
+        </div>
+    </div>
+</div>

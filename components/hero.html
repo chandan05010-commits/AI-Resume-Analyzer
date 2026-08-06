@@ -1,0 +1,35 @@
+<section class="hero-section">
+    <div class="hero-header">
+        <span class="badge">AI Resume Analyzer</span>
+        <h1>Beat the ATS. Land Your Dream Job.</h1>
+        <p>Upload your resume and target job description to get instant match scores and suggestions.</p>
+    </div>
+
+    <!-- Main Form Container -->
+    <div class="form-card">
+        <form id="analyzerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="roleInput">Target Role</label>
+                    <input type="text" id="roleInput" placeholder="e.g. Software Engineer" required>
+                </div>
+                <div class="form-group">
+                    <label for="companyInput">Company Name (Optional)</label>
+                    <input type="text" id="companyInput" placeholder="e.g. Google">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="jdInput">Job Description (JD)</label>
+                <textarea id="jdInput" rows="4" placeholder="Paste the job requirements here..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="resumeFile">Upload Resume (PDF/DOCX)</label>
+                <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Analyze Resume Now</button>
+        </form>
+    </div>
+</section>

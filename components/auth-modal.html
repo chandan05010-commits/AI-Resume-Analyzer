@@ -1,0 +1,24 @@
+<!-- Background Overlay par click karne se modal band hoga -->
+<div id="authModal" class="modal hidden" onclick="closeAuthModalOnOutsideClick(event)">
+    <div class="modal-content">
+        <!-- Exit / Close Button -->
+        <button type="button" onclick="closeAuthModal()" class="close-btn">&times;</button>
+
+        <h3 id="authTitle">Login</h3>
+        <form onsubmit="handleAuthSubmit(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="student@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" id="authBtn" class="btn-primary full-width">Sign In</button>
+        </form>
+        <p class="toggle-auth">
+            <span id="toggleText">Don't have an account?</span> 
+            <a href="#" onclick="toggleAuthMode()" id="toggleBtn"class="signup-link" >Sign Up</a>
+        </p>
+    </div>
+</div>
