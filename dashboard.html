@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - ResuMatch AI</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-icon">🤖</span>
+            <span class="logo-text">ResuMatch AI</span>
+        </div>
+        <div class="user-profile-nav">
+            <span id="welcomeUser" style="color: #cbd5e1; font-weight: bold;">Welcome, Candidate!</span>
+            <button onclick="logoutUser()" class="btn-secondary" style="margin-left: 15px;">Logout</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container" style="max-width: 1000px; margin: 100px auto 40px auto; padding: 0 20px;">
+        
+        <h2 style="font-size: 28px; margin-bottom: 5px;">Candidate Dashboard</h2>
+        <p style="color: #94a3b8; margin-bottom: 30px;">Track your job applications and review past ATS scores.</p>
+
+        <!-- SECTION 1: Do You Apply Form -->
+        <div class="form-card" style="max-width: 100%; margin-bottom: 40px;">
+            <h3 style="color: #38bdf8; margin-bottom: 15px;">📌 Track New Job Application ("Do You Apply?")</h3>
+            <form id="applyTrackerForm" onsubmit="handleApplySubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="applyCompany">Company Name</label>
+                        <input type="text" id="applyCompany" placeholder="e.g. Google, Amazon" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="applyRole">Applied Role</label>
+                        <input type="text" id="applyRole" placeholder="e.g. Frontend Developer" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="applyDate">Applied Date</label>
+                        <input type="date" id="applyDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="applyStatus">Status</label>
+                        <select id="applyStatus" style="width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #334155; color: white; border-radius: 5px;">
+                            <option value="Applied">Applied</option>
+                            <option value="Interview Scheduled">Interview Scheduled</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Offer Received">Offer Received</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Save Application Data</button>
+            </form>
+        </div>
+
+        <!-- SECTION 2: Saved Applications History Table -->
+        <div class="card" style="margin-bottom: 40px;">
+            <h3 style="margin-bottom: 15px;">📁 Job Applications History</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; text-align: left; border-collapse: collapse; color: #cbd5e1;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid #334155; color: #38bdf8;">
+                            <th style="padding: 10px;">Company</th>
+                            <th style="padding: 10px;">Role</th>
+                            <th style="padding: 10px;">Date</th>
+                            <th style="padding: 10px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="applicationsTableBody">
+                        <!-- Dynamic Rows will appear here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Previous ATS Score History -->
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">📊 Saved ATS Scores History</h3>
+            <div class="grid-3" id="atsScoreHistory">
+                <!-- Static Fallback Cards (Agar baseline record dekhna ho) -->
+                <div class="card" style="background: #0f172a; border: 1px solid #334155;">
+                    <h4>Sample Role</h4>
+                    <p style="font-size: 12px; color: #94a3b8;">Scanned on: Initial Test</p>
+                    <div style="margin-top: 10px; font-size: 20px; font-weight: bold; color: #4ade80;">
+                        Score: 75%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script for Dashboard Operations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userEmail = localStorage.getItem("userEmail");
+            if (userEmail) {
+                document.getElementById("welcomeUser").innerText = "Welcome, " + userEmail;
+            }
+            loadApplications();
+            loadAtsScores();
+        });
+
+        function logoutUser() {
+            localStorage.removeItem("userEmail");
+            window.location.href = "index.html";
+        }
+
+        function handleApplySubmit(e) {
+            e.preventDefault();
+            const company = document.getElementById("applyCompany").value;
+            const role = document.getElementById("applyRole").value;
+            const date = document.getElementById("applyDate").value;
+            const status = document.getElementById("applyStatus").value;
+
+            const newApp = { company, role, date, status };
+
+            let apps = JSON.parse(localStorage.getItem("jobApplications") || "[]");
+            apps.push(newApp);
+            localStorage.setItem("jobApplications", JSON.stringify(apps));
+
+            document.getElementById("applyTrackerForm").reset();
+            loadApplications();
+            alert("Application data saved successfully!");
+        }
+
+        function loadApplications() {
+            let apps = JSON.parse(localStorage.getItem("jobApplications") || "[]");
+            const tbody = document.getElementById("applicationsTableBody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            if (apps.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 15px; text-align: center; color: #64748b;">No applications recorded yet.</td></tr>`;
+                return;
+            }
+
+            apps.forEach(app => {
+                const row = `
+                    <tr style="border-bottom: 1px solid #1e293b;">
+                        <td style="padding: 10px;">${app.company}</td>
+                        <td style="padding: 10px;">${app.role}</td>
+                        <td style="padding: 10px;">${app.date}</td>
+                        <td style="padding: 10px;"><span style="background: #1e3a8a; color: #60a5fa; padding: 3px 8px; border-radius: 4px; font-size: 12px;">${app.status}</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function loadAtsScores() {
+            let scores = JSON.parse(localStorage.getItem("userAtsScores") || "[]");
+            const container = document.getElementById("atsScoreHistory");
+            if (!container) return;
+
+            if (scores.length > 0) {
+                container.innerHTML = ""; // Static baseline hata kar user ka data show karega
+                scores.forEach(item => {
+                    const card = `
+                        <div class="card" style="background: #0f172a; border: 1px solid #334155;">
+                            <h4>${item.role}</h4>
+                            <p style="font-size: 12px; color: #94a3b8;">Scanned on: ${item.date}</p>
+                            <div style="margin-top: 10px; font-size: 20px; font-weight: bold; color: #4ade80;">
+                                Score: ${item.score}
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            }
+        }
+    </script>
+</body>
+</html>

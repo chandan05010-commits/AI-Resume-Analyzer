@@ -1,24 +1,49 @@
-<div id="resultModal" class="modal hidden">
-    <div class="modal-content">
-        <button onclick="closeModal()" class="close-btn">&times;</button>
+<div id="resultModal" class="modal hidden" onclick="closeResultModalOnOutsideClick(event)">
+    <!-- Added max-height, overflow-y: auto for SCROLLBAR -->
+    <div class="modal-content" id="draggableModal" style="position: relative; max-width: 550px; margin: 30px auto; max-height: 85vh; overflow-y: auto; border-radius: 10px;">
         
-        <div id="loadingState">
-            <div class="spinner"></div>
-            <p id="loadingText">Analyzing Resume...</p>
+        <!-- Drag Header -->
+        <div id="modalHeader" style="cursor: move; padding: 10px; background: #1e293b; text-align: center; border-bottom: 1px solid #334155; user-select: none; position: sticky; top: 0; z-index: 10;">
+            <span style="font-size: 13px; color: #94a3b8;">✋ Hold & Drag to Move Popup</span>
         </div>
 
-        <div id="outputState" class="hidden">
-            <h3>Analysis Report</h3>
-            <div class="score-box">
-                <span>ATS Match Score:</span>
-                <strong class="score">82%</strong>
+        <div style="padding: 20px;">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-box">
+                <div class="spinner"></div>
+                <h3>Analyzing Resume with AI...</h3>
+                <p>Matching keywords, checking formatting, and scoring ATS compatibility.</p>
             </div>
-            <h4>Missing Keywords:</h4>
-            <div class="tags">
-                <span class="tag">Docker</span>
-                <span class="tag">System Design</span>
-                <span class="tag">REST API</span>
+
+            <!-- Output State -->
+            <div id="outputState" class="hidden">
+                <h2 style="text-align: center; margin-bottom: 10px;">ATS Scan Result</h2>
+                
+                <div class="score-circle" style="text-align: center; margin: 15px 0;">
+                    <span style="font-size: 14px; color: #94a3b8;">Match Score</span>
+                    <h1 id="resScore" style="font-size: 44px; color: #38bdf8; margin: 5px 0;">82%</h1>
+                </div>
+
+                <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 15px; padding: 15px;">
+                    <h4 style="color: #f87171; margin-bottom: 8px;">⚠️ Missing Key Skills & Keywords:</h4>
+                    <p style="font-size: 14px; color: #cbd5e1;">Docker, Kubernetes, CI/CD Pipelines, GraphQL</p>
+                </div>
+
+                <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 20px; padding: 15px;">
+                    <h4 style="color: #4ade80; margin-bottom: 8px;">💡 AI Improvement Suggestion:</h4>
+                    <p style="font-size: 14px; color: #cbd5e1;">Add measurable metrics (e.g. "Improved API response time by 30%") to your experience bullet points.</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <button type="button" onclick="saveAndTrackResult()" class="btn-primary" style="width: 100%; margin-bottom: 10px;">
+                    📌 Save Report & Track Job in Dashboard
+                </button>
+
+                <button type="button" onclick="closeResultModal()" class="btn-secondary" style="width: 100%;">
+                    Close
+                </button>
             </div>
         </div>
+
     </div>
 </div>
